@@ -1,31 +1,80 @@
-﻿ID,Command,Usage
-1,\l,Lists all available databases
-2,\l+,"Lists all databases with more details (size, owner, etc.)"
-3,\c <database_name>,Connects to a specific database
-4,\dt,Lists all tables in the current database
-5,\dt+,"Lists all tables with more details (owner, schema, etc.)"
-6,\d+ <table_name>,Shows the detailed schema of a specific table
-7,SHOW DATABASES,Lists all databases using an SQL statement
-8,SELECT datname FROM pg_database,Lists all databases using an SQL statement (equivalent to \l)
-9,SHOW TABLES,Lists all tables in the current database using an SQL statement
-10,SELECT table_name FROM information_schema.tables,Lists all tables in the current database using an SQL statement (equivalent to \dt)
-11,CREATE DATABASE,Creates a new database
-12,DROP DATABASE,Drops an existing database
-13,CREATE TABLE,Creates a new table
-14,DROP TABLE,Drops an existing table
-15,SELECT,Selects data from a table
-16,INSERT INTO,Inserts data into a table
-17,UPDATE,Updates data in a table
-18,DELETE FROM,Deletes data from a table
-19,WHERE,Filters data in a SELECT statement
-20,ORDER BY,Sorts data in a SELECT statement
-21,GROUP BY,Groups data in a SELECT statement
-22,HAVING,Filters grouped data in a SELECT statement
-23,JOIN,Combines data from multiple tables
-24,UNION,Combines the results of multiple SELECT statements
-25,CREATE INDEX,Creates an index to improve query performance
-26,DROP INDEX,Drops an existing index
-27,GRANT,Grants permissions to users on database objects
-28,REVOKE,Revokes permissions from users on database objects
-29,ALTER TABLE,Modifies the structure of a table
-30,ALTER DATABASE,Modifies the properties of a database
+﻿ID,Command,Category,Usage,Example
+1,CREATE USER,DCL,Create a new database user.,CREATE USER myuser WITH PASSWORD 'mypassword';
+2,DROP USER,DCL,Remove an existing database user.,DROP USER myuser;
+3,ALTER USER,DCL,Modify an existing database user.,ALTER USER myuser WITH PASSWORD 'newpassword';
+4,CREATE ROLE,DCL,Create a new database role.,CREATE ROLE myrole;
+5,DROP ROLE,DCL,Remove an existing database role.,DROP ROLE myrole;
+6,ALTER ROLE,DCL,Modify an existing database role.,ALTER ROLE myrole WITH LOGIN;
+7,SET ROLE,DCL,Set the current session role.,SET ROLE myrole;
+8,SET SESSION AUTHORIZATION,DCL,Set the current session user.,SET SESSION AUTHORIZATION myuser;
+9,GRANT,DCL,Give specific privileges to a user or group on database objects.,GRANT SELECT ON users TO public;
+10,REVOKE,DCL,Revoke previously granted privileges from a user or group.,REVOKE SELECT ON users FROM public;
+11,CREATE TABLE,DDL,Create a new table with specified columns and constraints.,"CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(50));"
+12,ALTER TABLE,DDL,"Modify the structure of an existing table by adding, modifying, or dropping columns or constraints.",ALTER TABLE users ADD COLUMN email VARCHAR(100);
+13,DROP TABLE,DDL,Delete an existing table and all its data.,DROP TABLE users;
+14,CREATE INDEX,DDL,Create an index on one or more columns of a table to improve query performance.,CREATE INDEX idx_name ON users(name);
+15,DROP INDEX,DDL,Remove an existing index from a table.,DROP INDEX idx_name;
+16,CREATE VIEW,DDL,Create a virtual table based on the result of a SELECT query.,CREATE VIEW active_users AS SELECT * FROM users WHERE active = true;
+17,DROP VIEW,DDL,Delete an existing view.,DROP VIEW active_users;
+18,CREATE SCHEMA,DDL,Create a new schema within the current database.,CREATE SCHEMA myschema;
+19,DROP SCHEMA,DDL,Remove a schema and all its objects from the database.,DROP SCHEMA myschema;
+20,CREATE DATABASE,DDL,Create a new database.,CREATE DATABASE mydb;
+21,DROP DATABASE,DDL,Remove an existing database.,DROP DATABASE mydb;
+22,ALTER DATABASE,DDL,Modify an existing database.,ALTER DATABASE mydb RENAME TO newdb;
+23,CREATE RULE,DDL,Create a new rule to rewrite queries.,CREATE RULE myrule AS ON INSERT TO mytable DO INSTEAD INSERT INTO mylog VALUES (new.*);
+24,ALTER RULE,DDL,Modify an existing rule.,ALTER RULE myrule RENAME TO newrule;
+25,DROP RULE,DDL,Delete an existing rule.,DROP RULE myrule ON mytable;
+26,CREATE TABLESPACE,DDL,Create a new storage location for database objects.,CREATE TABLESPACE myspace LOCATION '/path/to/space';
+27,DROP TABLESPACE,DDL,Delete an existing storage location.,DROP TABLESPACE myspace;
+28,ALTER TABLESPACE,DDL,Modify an existing storage location.,ALTER TABLESPACE myspace OWNER TO newowner;
+29,CREATE AGGREGATE,DDL,Define a new aggregate function.,"CREATE AGGREGATE myagg (sfunc = sum, basetype = int);"
+30,ALTER AGGREGATE,DDL,Modify an existing aggregate function.,ALTER AGGREGATE myagg RENAME TO newagg;
+31,DROP AGGREGATE,DDL,Delete an existing aggregate function.,DROP AGGREGATE myagg (int);
+32,CREATE DOMAIN,DDL,Define a new domain.,CREATE DOMAIN mydomain AS INTEGER CHECK (VALUE > 0);
+33,ALTER DOMAIN,DDL,Modify an existing domain.,ALTER DOMAIN mydomain ADD CONSTRAINT check_domain CHECK (VALUE > 0);
+34,DROP DOMAIN,DDL,Delete an existing domain.,DROP DOMAIN mydomain;
+35,CREATE TYPE,DDL,Define a new composite type.,"CREATE TYPE mytype AS ENUM ('A', 'B', 'C');"
+36,DROP TYPE,DDL,Delete an existing composite type.,DROP TYPE mytype;
+37,RENAME,DDL,Rename an existing object.,ALTER TABLE old_name RENAME TO new_name;
+38,CREATE FOREIGN KEY,DDL,Define a foreign key constraint.,ALTER TABLE orders ADD CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customers(id);
+39,CREATE PRIMARY KEY,DDL,Define a primary key constraint.,ALTER TABLE users ADD PRIMARY KEY (id);
+40,CREATE COMPOSITE KEY,DDL,Define a composite key constraint.,"ALTER TABLE employee ADD PRIMARY KEY (department_id, employee_id);"
+41,EXPORT DATABASE,DDL,Export the entire database schema and data.,pg_dump -U username dbname > backup.sql
+42,IMPORT DATABASE,DDL,Import a database schema and data.,psql -U username dbname < backup.sql
+43,PostgreSQL Functions,DDL,Define user-defined functions.,CREATE FUNCTION my_function() RETURNS INTEGER AS $$ BEGIN RETURN 42; END; $$ LANGUAGE plpgsql;
+44,Triggers,DDL,Define actions to be taken when certain database events occur.,CREATE TRIGGER audit_trigger AFTER INSERT ON users FOR EACH ROW EXECUTE FUNCTION audit_function();
+45,RENAME,DDL,Rename an existing object.,ALTER TABLE old_name RENAME TO new_name;
+46,SELECT,DML,Retrieve data from one or more tables.,SELECT * FROM users;
+47,INSERT INTO,DML,Add new rows to a table.,"INSERT INTO users (name, email) VALUES ('John Doe', 'john@example.com');"
+48,UPDATE,DML,Modify existing data in a table.,UPDATE users SET email = 'new@example.com' WHERE id = 1;
+49,DELETE FROM,DML,Remove rows from a table based on a condition.,DELETE FROM users WHERE id = 1;
+50,TRUNCATE TABLE,DML,"Remove all rows from a table, but keeps the table structure intact.",TRUNCATE TABLE users;
+51,GROUP BY,DML,Group rows that have the same values into summary rows.,"SELECT department, SUM(salary) FROM employees GROUP BY department;"
+52,HAVING,DML,Filter groups of rows returned by a GROUP BY clause.,"SELECT department, SUM(salary) FROM employees GROUP BY department HAVING SUM(salary) > 100000;"
+53,IN,DML,Specify multiple values in a WHERE clause.,"SELECT * FROM users WHERE id IN (1, 2, 3);"
+54,LIKE,DML,Filter rows based on a pattern.,SELECT * FROM users WHERE name LIKE 'J%';
+55,BETWEEN,DML,Filter rows based on a range of values.,SELECT * FROM users WHERE age BETWEEN 18 AND 25;
+56,COPY TABLE,DML,Copy data from a file into a table.,"COPY users FROM '/path/to/data.csv' DELIMITER ',' CSV HEADER;"
+57,COMPARE TABLE,DML,Compare the structure and data of two tables.,SELECT * FROM table1 EXCEPT SELECT * FROM table2;
+58,EXPORT TABLE,DML,Export table data to a file.,"COPY users TO '/path/to/data.csv' DELIMITER ',' CSV HEADER;"
+59,IMPORT TABLE,DML,Import table data from a file.,"COPY users FROM '/path/to/data.csv' DELIMITER ',' CSV HEADER;"
+60,BEGIN,DTL,Start a new transaction block.,BEGIN;
+61,COMMIT,DTL,Save all changes made during the current transaction.,COMMIT;
+62,ROLLBACK,DTL,Discard all changes made during the current transaction.,ROLLBACK;
+63,SAVEPOINT,DTL,Set a savepoint within the current transaction.,SAVEPOINT my_savepoint;
+64,RELEASE SAVEPOINT,DTL,Remove a previously defined savepoint.,RELEASE SAVEPOINT my_savepoint;
+65,ROLLBACK TO SAVEPOINT,DTL,Roll back to a specific savepoint within the current transaction.,ROLLBACK TO SAVEPOINT my_savepoint;
+66,EXPLAIN,DTL,Show the execution plan of a query.,EXPLAIN SELECT * FROM users;
+67,VACUUM,DTL,Reclaim storage and reorganize the database.,VACUUM ANALYZE;
+68,ANALYZE,DTL,Collect statistics about the contents of tables.,ANALYZE users;
+69,INNER JOIN,Join,Retrieve records that have matching values in both tables.,SELECT * FROM table1 INNER JOIN table2 ON table1.id = table2.id;
+70,LEFT JOIN,Join,Retrieve all records from the left table and the matched records from the right table.,SELECT * FROM table1 LEFT JOIN table2 ON table1.id = table2.id;
+71,RIGHT JOIN,Join,Retrieve all records from the right table and the matched records from the left table.,SELECT * FROM table1 RIGHT JOIN table2 ON table1.id = table2.id;
+72,FULL JOIN,Join,Retrieve all records when there is a match in either the left or right table.,SELECT * FROM table1 FULL JOIN table2 ON table1.id = table2.id;
+73,SELF JOIN,Join,Join a table with itself.,"SELECT e1.name, e2.name FROM employees e1 INNER JOIN employees e2 ON e1.manager_id = e2.id;"
+74,CREATE FUNCTION,Procedure,Create a new user-defined function.,"CREATE FUNCTION hello_world() RETURNS VARCHAR AS $$ BEGIN RETURN 'Hello, world!'; END; $$ LANGUAGE plpgsql;"
+75,ALTER FUNCTION,Procedure,Modify an existing user-defined function.,ALTER FUNCTION hello_world() RENAME TO greetings;
+76,DROP FUNCTION,Procedure,Delete an existing user-defined function.,DROP FUNCTION hello_world();
+77,CREATE TRIGGER,Procedure,Attach a function to a database event.,CREATE TRIGGER audit_trigger AFTER INSERT ON users FOR EACH ROW EXECUTE FUNCTION audit_function();
+78,ALTER TRIGGER,Procedure,Modify an existing trigger.,ALTER TRIGGER audit_trigger DISABLE;
+79,DROP TRIGGER,Procedure,Remove an existing trigger from a table.,DROP TRIGGER audit_trigger ON users;
