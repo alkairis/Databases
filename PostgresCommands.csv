@@ -1,0 +1,31 @@
+﻿ID,Command,Usage
+1,\l,Lists all available databases
+2,\l+,"Lists all databases with more details (size, owner, etc.)"
+3,\c <database_name>,Connects to a specific database
+4,\dt,Lists all tables in the current database
+5,\dt+,"Lists all tables with more details (owner, schema, etc.)"
+6,\d+ <table_name>,Shows the detailed schema of a specific table
+7,SHOW DATABASES,Lists all databases using an SQL statement
+8,SELECT datname FROM pg_database,Lists all databases using an SQL statement (equivalent to \l)
+9,SHOW TABLES,Lists all tables in the current database using an SQL statement
+10,SELECT table_name FROM information_schema.tables,Lists all tables in the current database using an SQL statement (equivalent to \dt)
+11,CREATE DATABASE,Creates a new database
+12,DROP DATABASE,Drops an existing database
+13,CREATE TABLE,Creates a new table
+14,DROP TABLE,Drops an existing table
+15,SELECT,Selects data from a table
+16,INSERT INTO,Inserts data into a table
+17,UPDATE,Updates data in a table
+18,DELETE FROM,Deletes data from a table
+19,WHERE,Filters data in a SELECT statement
+20,ORDER BY,Sorts data in a SELECT statement
+21,GROUP BY,Groups data in a SELECT statement
+22,HAVING,Filters grouped data in a SELECT statement
+23,JOIN,Combines data from multiple tables
+24,UNION,Combines the results of multiple SELECT statements
+25,CREATE INDEX,Creates an index to improve query performance
+26,DROP INDEX,Drops an existing index
+27,GRANT,Grants permissions to users on database objects
+28,REVOKE,Revokes permissions from users on database objects
+29,ALTER TABLE,Modifies the structure of a table
+30,ALTER DATABASE,Modifies the properties of a database
